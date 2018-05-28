@@ -3,6 +3,7 @@ import random
 import math
 import numpy as np
 import random as rand
+
 random.seed(0)
 
 
@@ -46,19 +47,63 @@ def ocen(pop_start, miasta):
     return ocena
 
 
+def get_probability_list(fitnes):
+    fitness = fitnes
+    total_fit = float(sum(fitness))
+    relative_fitness = [f / total_fit for f in fitness]
+    probabilities = [sum(relative_fitness[:i + 1])
+                     for i in range(len(relative_fitness))]
+    return probabilities
+
+
+def roulette_wheel_pop(population, probabilities, number):
+    chosen = []
+    for n in range(number):
+        r = random.random()
+        for (i, individual) in enumerate(population):
+            if r <= probabilities[i]:
+                chosen.append(individual)
+                break
+    return chosen
+
+
 def selekcja(populacja, ocena):
-    print(populacja)
     new = []
-    for i in enumerate(ocena):
-        oc = i[1]/min(ocena)
-        new.append([[oc], populacja[i[0]]])
-
-
+    for ind, wartosc in enumerate(ocena):
+        new.append([[wartosc], populacja[ind]])
     new.sort(key=lambda b: b)
-    print new
+    new.reverse()  # moze sie okaze nie trzeba odwraca
+    posortowane = []
+    for fit, droga in new:
+        posortowane.append(droga)
+    # print posortowane
+    # print ocena
+    propa = get_probability_list(ocena)
+    # print propa
+
+    return roulette_wheel_pop(posortowane, propa, 10)
 
 
-    pass
+def krzyzowanie(populacja):
+    po_krzyzowce = []
+    cr = random.random()
+    for osobnik in populacja:
+        po_krzyzowce.append(osobnik)
+        if cr > 0.6:
+            syn = []
+            corka = []
+            punkt_podzialu = random.randint(1, len(osobnik) - 1)
+
+
+            # matka = random.choice(populacja)
+            # syn.extend(osobnik[:punkt_podzialu])
+            # syn.extend(matka[punkt_podzialu:])
+            # po_krzyzowce.append(syn)
+            # corka.extend(osobnik[punkt_podzialu:])
+            # corka.extend(matka[:punkt_podzialu])
+            # po_krzyzowce.append(corka)
+    print po_krzyzowce
+
 
 
 
@@ -69,14 +114,15 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
-    selekcja(pop_start, ocena)
-
     # selekcja
+    po_selekcji = selekcja(pop_start, ocena)
+    print po_selekcji
+
     # krzyzowanie
+    krzyzowanie(po_selekcji)
+
     # mutacja
 
 
-genetyk(5, 0, 3)
-
-
-
+# ile_miast, poczatek, ile_populacji
+genetyk(5, 0, 10)
