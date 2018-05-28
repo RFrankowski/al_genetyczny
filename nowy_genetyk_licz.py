@@ -112,6 +112,15 @@ def krzyzowanie(populacja, pocz):
     return po_krzyzowce
 
 
+def mutacja(populacja, ile_miast):
+    osobnik = populacja[0]
+    for ind, wartosc in enumerate(osobnik):
+        if 0.1 > random.random():
+            mut = random.randint(0, ile_miast)
+            osobnik[ind] = bin(mut)
+    pass
+
+
 def genetyk(ile_miast, poczatek, ile_populacji):
     pop_start = generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji)
     # print(pop_start)
@@ -125,8 +134,10 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 
     # krzyzowanie
     po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
-    print po_krzyzowaniu
+
     # mutacja
+
+    mutacja(po_krzyzowaniu, ile_miast)
 
 
 # ile_miast, poczatek, ile_populacji
