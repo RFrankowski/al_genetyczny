@@ -3,21 +3,21 @@
 import random
 from random import choice
 import graphviz as gv
-from PIL import Image
+# from PIL import Image
 
 graf = [['a', 'b', 3], ['a', 'e', 3], ['c', 'd', 3], ['c', 'f', 1], ['b', 'd', 3], ['e', 'f', 2], ['f', 'a', 6],
         ['f', 'd', 1], ['b', 'c', 1]]
 
-text = open('graf_test.txt').read()
-text = text.replace('\n', ',')
-text = list(text.split(','))
-graf = []
-for i in range(0, len(text) - 2, 2):
-    if len(graf) < 150:
-        krawedz = []
-        krawedz.append(text[i])
-        krawedz.append(text[i + 1])
-        graf.append(krawedz)
+# text = open('graf_test.txt').read()
+# text = text.replace('\n', ',')
+# text = list(text.split(','))
+# graf = []
+# for i in range(0, len(text) - 2, 2):
+#     if len(graf) < 150:
+#         krawedz = []
+#         krawedz.append(text[i])
+#         krawedz.append(text[i + 1])
+#         graf.append(krawedz)
 
 styles = {
     'graph': {
@@ -66,9 +66,9 @@ def rys_alg_gen_rozw(wektor, graph):
         g1.edge(pocz, kon)
     g1 = apply_styles(g1, styles)
     filename = g1.render(filename='img/g1')
-    img = Image.open('C:/Users/admin/Desktop/projektowanie_ekekty/Nowy/Nowy/img/g1.jpg')
-    img.show()
-    img.close()
+    # img = Image.open('C:/Users/admin/Desktop/projektowanie_ekekty/Nowy/Nowy/img/g1.jpg')
+    # img.show()
+    # img.close()
 
 
 def znajdz_sasiadow(graph, sourc):

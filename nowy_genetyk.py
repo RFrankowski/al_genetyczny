@@ -1,5 +1,11 @@
 import pygame,sys
-from drop import Drop
+# from drop import Drop
+import  random
+class Point():
+    def __init__(self):
+
+        x = random.randint(0,300)
+        y = random.randint(0,300)
 
 
 class Gra(object):
@@ -8,9 +14,9 @@ class Gra(object):
         # inicjalizacja
         pygame.init()
         self.screen = pygame.display.set_mode((600, 600))
-        self.d = []
-        for i in range(0, 500):
-            self.d.append(Drop(self))
+        # self.d = []
+        # for i in range(0, 500):
+        #     self.d.append(Drop(self))
         while True:
             # handle events
             for event in pygame.event.get():
@@ -25,8 +31,10 @@ class Gra(object):
             self.draw()
             pygame.display.flip()
     def draw(self):
-        for i in range(0, 500):
-            self.d[i].draw()
+        # x y with heith
+        pygame.draw.ellipse(self.screen, (0, 127, 0), (10, 10, 5, 5), 0)
+        pygame.draw.ellipse(self.screen, (0, 127, 0), (100, 50, 5, 5), 0)
+        pygame.draw.line(self.screen, (0, 127, 0), (10, 10), (100, 50))
 
 
 if __name__ == '__main__':
