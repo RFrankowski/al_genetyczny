@@ -1,5 +1,5 @@
 import random
-import sys,pygame
+import sys, pygame
 import math
 import numpy as np
 
@@ -32,7 +32,7 @@ def ocen(pop_start, miasta):
     for osobnik in pop_start:
         dlugosc_trasy = 0
         for i in enumerate(osobnik):
-            if i[0] != len(osobnik) -1:
+            if i[0] != len(osobnik) - 1:
                 miasto1 = osobnik[i[0]]
                 miasto2 = osobnik[i[0] + 1]
                 # print(pop_start)
@@ -40,7 +40,6 @@ def ocen(pop_start, miasta):
                 # print osobnik[i[0]], osobnik[i[0] + 1]
                 # print (miasta[int(miasto1,2)].x, miasta[int(miasto2].x)/
                 # print (miasta[miasto1].y, miasta[miasto2].y)
-
 
                 # print (int(miasto2, 2))
                 # print (int(miasto1, 2))
@@ -136,11 +135,12 @@ def krzyzowanie(populacja, pocz):
 def mutacja(populacja, ile_miast):
     for osobnik in populacja:
         for ind, wartosc in enumerate(osobnik):
-            if 0.1 > random.random():
+            if 0.01 > random.random():
                 if ind != 0 and ind != len(osobnik):
-                    mut = random.randint(1, ile_miast-1)
+                    mut = random.randint(1, ile_miast - 1)
                     osobnik[ind] = bin(mut)
     return populacja
+
 
 # def create_global_variable():
 global miasta
@@ -160,34 +160,35 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     # selekcja
     po_selekcji = selekcja(pop_start, ocena)
     # print po_selekcji
-
     # krzyzowanie
     po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
-
     # mutacja
-
     po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
     ocena = ocen(po_mutacji, miasta)
-
     i = 0
     while i < 999:
-
         po_selekcji = selekcja(po_mutacji, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
         po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
         ocena = ocen(po_mutacji, miasta)
-
-
         i += 1
-    print selekcja(po_mutacji, ocena)
+    print ocena
+    po_selekcji = selekcja(po_mutacji, ocena)
+    ocena = ocen(po_selekcji, miasta)
+    o = min(ocena)
+    index = ocena.index(o)
+    return po_selekcji[index]
 
 
 # ile_miast, poczatek, ile_populacji
-genetyk(20, 0, 40)
 
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
+
+    sciezka = genetyk(5, 0, 40)
+    for ind, wart in enumerate(sciezka):
+        sciezka[ind] = int(wart, 2)
+
+    print sciezka
     g = Gra(miasta)
-
-
