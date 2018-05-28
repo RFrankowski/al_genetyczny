@@ -19,10 +19,10 @@ def generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji):
         osobnik = []
         for miasto in range(ile_miast):
             if poczatek != miasto:
-                osobnik.append(miasto)
+                osobnik.append(bin(miasto))
         random.shuffle(osobnik)
-        osobnik.insert(0, poczatek)
-        osobnik.append(poczatek)
+        osobnik.insert(0, bin(poczatek))
+        osobnik.append(bin(poczatek))
         populacja.append(osobnik)
     return populacja
 
@@ -39,8 +39,8 @@ def ocen(pop_start, miasta):
                 # print (miasta[miasto1].x, miasta[miasto2].x)
                 # print (miasta[miasto1].y, miasta[miasto2].y)
 
-                iksy = math.pow(abs((miasta[miasto2].x - miasta[miasto1].x)), 2)
-                igreki = math.pow(abs((miasta[miasto2].y - miasta[miasto1].y)), 2)
+                iksy = math.pow(abs((miasta[int(miasto2, 2)].x - miasta[int(miasto1, 2)].x)), 2)
+                igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
                 dlugosc_trasy += math.sqrt(abs(iksy + igreki))
         ocena.append(dlugosc_trasy)
 
@@ -84,27 +84,32 @@ def selekcja(populacja, ocena):
     return roulette_wheel_pop(posortowane, propa, 10)
 
 
-def krzyzowanie(populacja):
+def krzyzowanie(populacja, pocz):
+    pocz = bin(pocz)
     po_krzyzowce = []
     cr = random.random()
     for osobnik in populacja:
         po_krzyzowce.append(osobnik)
         if cr > 0.6:
-            syn = []
-            corka = []
+            matka = random.choice(populacja)[1:len(osobnik) - 1]
+
+            syn = [pocz]
+            corka = [pocz]
             punkt_podzialu = random.randint(1, len(osobnik) - 1)
+            syn.extend(osobnik[1:punkt_podzialu])
+            for gen in matka:
+                if gen not in syn:
+                    syn.extend([gen])
+            syn.extend([pocz])
+            po_krzyzowce.append(syn)
 
-
-            # matka = random.choice(populacja)
-            # syn.extend(osobnik[:punkt_podzialu])
-            # syn.extend(matka[punkt_podzialu:])
-            # po_krzyzowce.append(syn)
-            # corka.extend(osobnik[punkt_podzialu:])
-            # corka.extend(matka[:punkt_podzialu])
-            # po_krzyzowce.append(corka)
-    print po_krzyzowce
-
-
+            corka.extend(osobnik[punkt_podzialu:1])
+            for gen in matka:
+                if gen not in corka:
+                    corka.extend([gen])
+            corka.extend([pocz])
+            po_krzyzowce.append(corka)
+    return po_krzyzowce
 
 
 def genetyk(ile_miast, poczatek, ile_populacji):
@@ -116,11 +121,11 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     ocena = ocen(pop_start, miasta)
     # selekcja
     po_selekcji = selekcja(pop_start, ocena)
-    print po_selekcji
+    # print po_selekcji
 
     # krzyzowanie
-    krzyzowanie(po_selekcji)
-
+    po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
+    print po_krzyzowaniu
     # mutacja
 
 
