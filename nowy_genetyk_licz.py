@@ -39,17 +39,25 @@ def genetyk(ile_miast):
     for i in miasta:
         print i.x, i.y
 
+    print("obliczam dlugosc \n")
     dlugos = 0
     for i in enumerate(pop_start[0]):
         if i[0] != len(pop_start[0]) - 1:
             miasto1 = pop_start[0][i[0]]
             miasto2 = pop_start[0][i[0] + 1]
-            # print pop_start[0][i[0]], pop_start[0][i[0]+1]
+            print pop_start[0][i[0]], pop_start[0][i[0] + 1]
+            print (miasta[miasto1].x, miasta[miasto2].x)
+            print (miasta[miasto1].y, miasta[miasto2].y)
 
-            dlugos += math.sqrt(
-                abs((miasta[miasto2].x - miasta[miasto1].x) ^ 2 + (miasta[miasto2].y - miasta[miasto1].y) ^ 2))
+            iksy = math.pow(abs((miasta[miasto2].x - miasta[miasto1].x)), 2)
+            igreki = math.pow(abs((miasta[miasto2].y - miasta[miasto1].y)), 2)
+            # print("iksy i igreki")
+            # print(iksy, igreki)
 
+            dlugos += math.sqrt(abs(iksy + igreki))
+    print("dlugosc")
     print dlugos
+    print("\n")
 
 
 genetyk(3)
