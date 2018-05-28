@@ -2,7 +2,7 @@ import random
 
 import math
 import numpy as np
-
+import random as rand
 random.seed(0)
 
 
@@ -26,38 +26,57 @@ def generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji):
     return populacja
 
 
-# print generuj_populacjie_starowa(3,2,1)
+def ocen(pop_start, miasta):
+    ocena = []
+    for osobnik in pop_start:
+        dlugosc_trasy = 0
+        for i in enumerate(osobnik):
+            if i[0] != len(osobnik) - 1:
+                miasto1 = osobnik[i[0]]
+                miasto2 = osobnik[i[0] + 1]
+                # print osobnik[i[0]], osobnik[i[0] + 1]
+                # print (miasta[miasto1].x, miasta[miasto2].x)
+                # print (miasta[miasto1].y, miasta[miasto2].y)
+
+                iksy = math.pow(abs((miasta[miasto2].x - miasta[miasto1].x)), 2)
+                igreki = math.pow(abs((miasta[miasto2].y - miasta[miasto1].y)), 2)
+                dlugosc_trasy += math.sqrt(abs(iksy + igreki))
+        ocena.append(dlugosc_trasy)
+
+    return ocena
 
 
-def genetyk(ile_miast):
-    pop_start = generuj_populacjie_starowa(2, 2, 1)
-    print(pop_start)
+def selekcja(populacja, ocena):
+    print(populacja)
+    new = []
+    for i in enumerate(ocena):
+        oc = i[1]/min(ocena)
+        new.append([[oc], populacja[i[0]]])
+
+
+    new.sort(key=lambda b: b)
+    print new
+
+
+    pass
+
+
+
+def genetyk(ile_miast, poczatek, ile_populacji):
+    pop_start = generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji)
+    # print(pop_start)
     miasta = []
     for i in range(ile_miast):
         miasta.append(Miasto())
+    ocena = ocen(pop_start, miasta)
+    selekcja(pop_start, ocena)
 
-    for i in miasta:
-        print i.x, i.y
-
-    print("obliczam dlugosc \n")
-    dlugos = 0
-    for i in enumerate(pop_start[0]):
-        if i[0] != len(pop_start[0]) - 1:
-            miasto1 = pop_start[0][i[0]]
-            miasto2 = pop_start[0][i[0] + 1]
-            print pop_start[0][i[0]], pop_start[0][i[0] + 1]
-            print (miasta[miasto1].x, miasta[miasto2].x)
-            print (miasta[miasto1].y, miasta[miasto2].y)
-
-            iksy = math.pow(abs((miasta[miasto2].x - miasta[miasto1].x)), 2)
-            igreki = math.pow(abs((miasta[miasto2].y - miasta[miasto1].y)), 2)
-            # print("iksy i igreki")
-            # print(iksy, igreki)
-
-            dlugos += math.sqrt(abs(iksy + igreki))
-    print("dlugosc")
-    print dlugos
-    print("\n")
+    # selekcja
+    # krzyzowanie
+    # mutacja
 
 
-genetyk(3)
+genetyk(5, 0, 3)
+
+
+
