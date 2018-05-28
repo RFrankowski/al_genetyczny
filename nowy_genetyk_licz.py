@@ -29,15 +29,26 @@ def generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji):
 
 def ocen(pop_start, miasta):
     ocena = []
+    # print len(pop_start)
     for osobnik in pop_start:
         dlugosc_trasy = 0
         for i in enumerate(osobnik):
-            if i[0] != len(osobnik) - 1:
+            if i[0] != len(osobnik) -1:
                 miasto1 = osobnik[i[0]]
                 miasto2 = osobnik[i[0] + 1]
+                # print(pop_start)
+
                 # print osobnik[i[0]], osobnik[i[0] + 1]
-                # print (miasta[miasto1].x, miasta[miasto2].x)
+                # print (miasta[int(miasto1,2)].x, miasta[int(miasto2].x)/
                 # print (miasta[miasto1].y, miasta[miasto2].y)
+
+
+                # print (int(miasto2, 2))
+                # print (int(miasto1, 2))
+                # # print osobnik
+                #
+                # print (miasta[int(miasto2, 2)].x , miasta[int(miasto1, 2)].x)
+                # igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
 
                 iksy = math.pow(abs((miasta[int(miasto2, 2)].x - miasta[int(miasto1, 2)].x)), 2)
                 igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
@@ -69,6 +80,7 @@ def roulette_wheel_pop(population, probabilities, number):
 
 def selekcja(populacja, ocena):
     new = []
+
     for ind, wartosc in enumerate(ocena):
         new.append([[wartosc], populacja[ind]])
     new.sort(key=lambda b: b)
@@ -81,7 +93,7 @@ def selekcja(populacja, ocena):
     propa = get_probability_list(ocena)
     # print propa
 
-    return roulette_wheel_pop(posortowane, propa, 10)
+    return roulette_wheel_pop(posortowane, propa, 30)
 
 
 def krzyzowanie(populacja, pocz):
@@ -94,7 +106,6 @@ def krzyzowanie(populacja, pocz):
             matka = random.choice(populacja)[1:len(osobnik) - 1]
 
             syn = [pocz]
-            corka = [pocz]
             punkt_podzialu = random.randint(1, len(osobnik) - 1)
             syn.extend(osobnik[1:punkt_podzialu])
             for gen in matka:
@@ -103,22 +114,34 @@ def krzyzowanie(populacja, pocz):
             syn.extend([pocz])
             po_krzyzowce.append(syn)
 
-            corka.extend(osobnik[punkt_podzialu:1])
-            for gen in matka:
-                if gen not in corka:
-                    corka.extend([gen])
-            corka.extend([pocz])
-            po_krzyzowce.append(corka)
+            # corka =[pocz]
+            #
+            # corka.extend(matka[1:punkt_podzialu])
+            # for gen in osobnik:
+            #     if gen not in corka:
+            #         corka.extend([gen])
+            # corka.extend([pocz])
+            # po_krzyzowce.append(corka)
+
+            # corka.extend(matka[punkt_podzialu:len(osobnik)])
+            # for gen in osobnik:
+            #     if gen not in corka:
+            #         corka.extend([gen])
+            # corka.extend([pocz])
+            # po_krzyzowce.append(corka)
+    # for i in po_krzyzowce:
+    #     print i
     return po_krzyzowce
 
 
 def mutacja(populacja, ile_miast):
-    osobnik = populacja[0]
-    for ind, wartosc in enumerate(osobnik):
-        if 0.1 > random.random():
-            mut = random.randint(0, ile_miast)
-            osobnik[ind] = bin(mut)
-    pass
+    for osobnik in populacja:
+        for ind, wartosc in enumerate(osobnik):
+            if 0.1 > random.random():
+                if ind != 0 and ind != len(osobnik):
+                    mut = random.randint(1, ile_miast-1)
+                    osobnik[ind] = bin(mut)
+    return populacja
 
 
 def genetyk(ile_miast, poczatek, ile_populacji):
@@ -128,6 +151,7 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
+    print ocena
     # selekcja
     po_selekcji = selekcja(pop_start, ocena)
     # print po_selekcji
@@ -137,8 +161,19 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 
     # mutacja
 
-    mutacja(po_krzyzowaniu, ile_miast)
+    po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
+    ocena = ocen(po_mutacji, miasta)
 
+    i = 0
+    while i < 999:
+
+        po_selekcji = selekcja(po_mutacji, ocena)
+        po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
+        po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
+        ocena = ocen(po_mutacji, miasta)
+
+        i += 1
+    print ocena
 
 # ile_miast, poczatek, ile_populacji
-genetyk(5, 0, 10)
+genetyk(10, 0, 20)
