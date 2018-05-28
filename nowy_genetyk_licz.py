@@ -1,8 +1,7 @@
 import random
-
+import sys,pygame
 import math
 import numpy as np
-import random as rand
 
 random.seed(0)
 
@@ -143,11 +142,17 @@ def mutacja(populacja, ile_miast):
                     osobnik[ind] = bin(mut)
     return populacja
 
+# def create_global_variable():
+global miasta
+miasta = []
+
+
+# create_global_variable()
 
 def genetyk(ile_miast, poczatek, ile_populacji):
     pop_start = generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji)
     # print(pop_start)
-    miasta = []
+    # miasta = []
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
@@ -172,8 +177,17 @@ def genetyk(ile_miast, poczatek, ile_populacji):
         po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
         ocena = ocen(po_mutacji, miasta)
 
+
         i += 1
-    print ocena
+    print selekcja(po_mutacji, ocena)
+
 
 # ile_miast, poczatek, ile_populacji
-genetyk(10, 0, 20)
+genetyk(20, 0, 40)
+
+from nowy_genetyk import Gra
+
+if __name__ == '__main__':
+    g = Gra(miasta)
+
+

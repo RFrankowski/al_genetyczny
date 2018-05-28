@@ -2,23 +2,14 @@ import pygame,sys
 # from drop import Drop
 import random
 
-class miasto():
-    def __init__(self, gra):
-
-        x = random.randint(0,300)
-        y = random.randint(0,300)
-
 
 
 class Gra(object):
-    def __init__(self):
-
+    def __init__(self,miasta):
+        self.mia = miasta
         # inicjalizacja
         pygame.init()
         self.screen = pygame.display.set_mode((600, 600))
-        # self.d = []
-        # for i in range(0, 500):
-        #     self.d.append(Drop(self))
         while True:
             # handle events
             for event in pygame.event.get():
@@ -34,9 +25,10 @@ class Gra(object):
             pygame.display.flip()
     def draw(self):
         # x y with heith
-        pygame.draw.ellipse(self.screen, (0, 127, 0), (10, 10, 5, 5), 0)
-        pygame.draw.ellipse(self.screen, (0, 127, 0), (100, 50, 5, 5), 0)
-        pygame.draw.line(self.screen, (0, 127, 0), (10, 10), (100, 50))
+        for m in self.mia:
+            pygame.draw.ellipse(self.screen, (0, 127, 0), (m.x, m.y, 5, 5), 0)
+            # pygame.draw.ellipse(self.screen, (0, 127, 0), (100, 50, 5, 5), 0)
+            # pygame.draw.line(self.screen, (0, 127, 0), (10, 10), (100, 50))
 
 
 if __name__ == '__main__':
