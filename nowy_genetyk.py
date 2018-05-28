@@ -1,11 +1,13 @@
 import pygame,sys
 # from drop import Drop
-import  random
-class Point():
-    def __init__(self):
+import random
+
+class miasto():
+    def __init__(self, gra):
 
         x = random.randint(0,300)
         y = random.randint(0,300)
+
 
 
 class Gra(object):

@@ -1,5 +1,5 @@
 import pygame
-from woda import Woda
+# from woda import Woda
 class Ship(object):
     def __init__(self, Gra_space):
         self.gra = Gra_space
