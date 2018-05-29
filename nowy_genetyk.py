@@ -31,6 +31,8 @@ class Gra(object):
     def draw(self):
         # x y with heith
         for m in self.mia:
+            if m.do_ktorej != -1:
+                pygame.draw.ellipse(self.screen, (200, 0, 0), (m.x, m.y, 10, 10), 0)
             pygame.draw.ellipse(self.screen, (0, 127, 0), (m.x, m.y, 5, 5), 0)
             # pygame.draw.ellipse(self.screen, (0, 127, 0), (100, 50, 5, 5), 0)
             # pygame.draw.line(self.screen, (0, 127, 0), (10, 10), (100, 50))

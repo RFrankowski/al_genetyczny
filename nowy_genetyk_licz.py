@@ -11,7 +11,12 @@ class Miasto():
         self.x = random.randint(0, 500)
         self.y = random.randint(0, 500)
         self.do_ktorej = -1
-        if random.random < 0.4:
+        self.ustaw_czas()
+
+
+    def ustaw_czas(self):
+        tr = random.random()
+        if tr < 0.3:
             self.do_ktorej = random.randint(8, 16)
 
 
@@ -141,7 +146,7 @@ def mutacja(populacja, ile_miast):
                     wartosc1 = osobnik[mut]
                     osobnik[mut] = wartosc
                     osobnik[ind] = wartosc1
-    return  populacja
+    return populacja
 
 
 global miasta
@@ -160,7 +165,7 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     ocena = ocen(po_mutacji, miasta)
 
     i = 0
-    while i < 10000:
+    while i < 500:
         print i
         po_selekcji = selekcja(po_mutacji, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
