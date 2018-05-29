@@ -78,11 +78,10 @@ def roulette_wheel_pop(population, probabilities, number):
 
 def selekcja(populacja, ocena):
     new = []
-
     for ind, wartosc in enumerate(ocena):
         new.append([[wartosc], populacja[ind]])
     new.sort(key=lambda b: b)
-    new.reverse()  # moze sie okaze nie trzeba odwraca
+    # new.reverse()  # moze sie okaze nie trzeba odwraca
     posortowane = []
     for fit, droga in new:
         posortowane.append(droga)
@@ -97,8 +96,8 @@ def selekcja(populacja, ocena):
 def krzyzowanie(populacja, pocz):
     pocz = bin(pocz)
     po_krzyzowce = []
-    cr = random.random()
     for osobnik in populacja:
+        cr = random.random()
         po_krzyzowce.append(osobnik)
         if cr > 0.6:
             matka = random.choice(populacja)[1:len(osobnik) - 1]
@@ -112,23 +111,14 @@ def krzyzowanie(populacja, pocz):
             syn.extend([pocz])
             po_krzyzowce.append(syn)
 
-            # corka =[pocz]
-            #
-            # corka.extend(matka[1:punkt_podzialu])
-            # for gen in osobnik:
-            #     if gen not in corka:
-            #         corka.extend([gen])
-            # corka.extend([pocz])
-            # po_krzyzowce.append(corka)
+            corka = [pocz]
 
-            # corka.extend(matka[punkt_podzialu:len(osobnik)])
-            # for gen in osobnik:
-            #     if gen not in corka:
-            #         corka.extend([gen])
-            # corka.extend([pocz])
-            # po_krzyzowce.append(corka)
-    # for i in po_krzyzowce:
-    #     print i
+            corka.extend(matka[1:punkt_podzialu])
+            for gen in osobnik:
+                if gen not in corka and gen != pocz:
+                    corka.extend([gen])
+            corka.extend([pocz])
+            po_krzyzowce.append(corka)
     return po_krzyzowce
 
 
@@ -151,44 +141,41 @@ miasta = []
 
 def genetyk(ile_miast, poczatek, ile_populacji):
     pop_start = generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji)
-    # print(pop_start)
-    # miasta = []
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
-    print ocena
-    # selekcja
+    firstocena = ocen(pop_start, miasta)
     po_selekcji = selekcja(pop_start, ocena)
-    # print po_selekcji
-    # krzyzowanie
     po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
-    # mutacja
     po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
     ocena = ocen(po_mutacji, miasta)
+
     i = 0
-    while i < 999:
-        po_selekcji = selekcja(po_mutacji, ocena)
+    while i < 2000:
+        print len(po_mutacji)
+        po_selekcji = selekcja(po_krzyzowaniu, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
         po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
         ocena = ocen(po_mutacji, miasta)
-        i += 1
-    print ocena
-    po_selekcji = selekcja(po_mutacji, ocena)
-    ocena = ocen(po_selekcji, miasta)
-    o = min(ocena)
-    index = ocena.index(o)
-    return po_selekcji[index]
 
+        i += 1
+
+    print firstocena
+    print(ocena)
+    # print(po_selekcji)
+
+
+genetyk(10, 0, 20)
 
 # ile_miast, poczatek, ile_populacji
 
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
-
-    sciezka = genetyk(5, 0, 40)
-    for ind, wart in enumerate(sciezka):
-        sciezka[ind] = int(wart, 2)
-
-    print sciezka
-    g = Gra(miasta)
+    pass
+    # sciezka = genetyk(5, 0, 40)
+    # for ind, wart in enumerate(sciezka):
+    #     sciezka[ind] = int(wart, 2)
+    #
+    # print sciezka
+    # g = Gra(miasta)
