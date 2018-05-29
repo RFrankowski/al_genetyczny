@@ -3,7 +3,7 @@ import sys, pygame
 import math
 import numpy as np
 
-random.seed(0)
+# random.seed(0)
 
 
 class Miasto():
@@ -81,7 +81,7 @@ def selekcja(populacja, ocena):
     for ind, wartosc in enumerate(ocena):
         new.append([[wartosc], populacja[ind]])
     new.sort(key=lambda b: b)
-    # new.reverse()  # moze sie okaze nie trzeba odwraca
+    new.reverse()  # moze sie okaze nie trzeba odwraca
     posortowane = []
     for fit, droga in new:
         posortowane.append(droga)
@@ -151,7 +151,7 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     ocena = ocen(po_mutacji, miasta)
 
     i = 0
-    while i < 2000:
+    while i < 10000:
         print len(po_mutacji)
         po_selekcji = selekcja(po_krzyzowaniu, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
@@ -163,17 +163,18 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     print firstocena
     print(ocena)
     # print(po_selekcji)
+    return ocena
 
-
-genetyk(10, 0, 20)
 
 # ile_miast, poczatek, ile_populacji
 
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
-    pass
-    # sciezka = genetyk(5, 0, 40)
+    genetyk(10, 0, 20)
+
+    # pass
+    # sciezka = genetyk(10, 0, 40)
     # for ind, wart in enumerate(sciezka):
     #     sciezka[ind] = int(wart, 2)
     #
