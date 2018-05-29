@@ -133,44 +133,35 @@ def krzyzowanie(populacja, pocz):
 
 
 def mutacja(populacja, ile_miast):
-    nowa_pop = []
     for osobnik in populacja:
-
         for ind, wartosc in enumerate(osobnik):
             if 0.03 > random.random():
                 if ind != 0 and ind != len(osobnik)-1:
-                    nowy_osobnik = osobnik
                     mut = random.randint(1, ile_miast -1)
                     wartosc1 = osobnik[mut]
-                    nowy_osobnik[mut] = wartosc
-                    nowy_osobnik[ind] = wartosc1
-
-                    nowa_pop.append(nowy_osobnik)
-            else:
-                nowa_pop.append(osobnik)
-    return  nowa_pop
+                    osobnik[mut] = wartosc
+                    osobnik[ind] = wartosc1
+    return  populacja
 
 
-# def create_global_variable():
 global miasta
 miasta = []
 
 
-# create_global_variable()
 
 def genetyk(ile_miast, poczatek, ile_populacji):
     pop_start = generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji)
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
-    # firstocena = ocen(pop_start, miasta)
     po_selekcji = selekcja(pop_start, ocena)
     po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
     po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
     ocena = ocen(po_mutacji, miasta)
 
     i = 0
-    while i < 10:
+    while i < 10000:
+        print i
         po_selekcji = selekcja(po_mutacji, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
         po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
@@ -178,7 +169,6 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 
         i += 1
 
-    # print firstocena
     print(ocena)
 
     return po_mutacji[ocena.index(min(ocena))]
@@ -189,9 +179,6 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
-    # genetyk(10, 0, 20)
-
-    # pass
     sciezka = genetyk(15, 0, 40)
     for ind, wart in enumerate(sciezka):
         sciezka[ind] = int(wart, 2)
