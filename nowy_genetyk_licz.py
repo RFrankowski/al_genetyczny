@@ -3,8 +3,7 @@ import sys, pygame
 import math
 import numpy as np
 
-
-# random.seed(0)
+random.seed(0)
 
 
 class Miasto():
@@ -26,6 +25,7 @@ def generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji):
         random.shuffle(osobnik)
         osobnik.insert(0, bin(poczatek))
         osobnik.append(bin(poczatek))
+        # print len(osobnik)
         populacja.append(osobnik)
     return populacja
 
@@ -34,7 +34,7 @@ def ocen(pop_start, miasta):
     ocena = []
     # print len(pop_start)
     for osobnik in pop_start:
-        czas = 7 # kurier zaczyna prace o 7
+        czas = 7  # kurier zaczyna prace o 7
         dlugosc_trasy = 0
         for i in enumerate(osobnik):
             if i[0] != len(osobnik) - 1:
@@ -53,18 +53,14 @@ def ocen(pop_start, miasta):
                 # print (miasta[int(miasto2, 2)].x , miasta[int(miasto1, 2)].x)
                 # igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
 
-
                 iksy = math.pow(abs((miasta[int(miasto2, 2)].x - miasta[int(miasto1, 2)].x)), 2)
                 igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
                 odcinek = math.sqrt(abs(iksy + igreki))
                 dlugosc_trasy += odcinek
-                czas += (odcinek/2)/60
+                czas += (odcinek / 2) / 60
                 if miasta[int(miasto1, 2)].do_ktorej > czas:
                     # jak sie nie wyrobi to dostaje kare w wysorkosci 500
                     dlugosc_trasy += 500
-
-
-
 
         ocena.append(dlugosc_trasy)
 
@@ -96,14 +92,11 @@ def selekcja(populacja, ocena):
     for ind, wartosc in enumerate(ocena):
         new.append([[wartosc], populacja[ind]])
     new.sort(key=lambda b: b)
-    new.reverse()  # moze sie okaze nie trzeba odwraca
+    new.reverse()
     posortowane = []
     for fit, droga in new:
         posortowane.append(droga)
-    # print posortowane
-    # print ocena
     propa = get_probability_list(ocena)
-    # print propa
 
     return roulette_wheel_pop(posortowane, propa, 30)
 
@@ -112,25 +105,27 @@ def krzyzowanie(populacja, pocz):
     pocz = bin(pocz)
     po_krzyzowce = []
     for osobnik in populacja:
+
         cr = random.random()
         po_krzyzowce.append(osobnik)
         if cr > 0.6:
             matka = random.choice(populacja)[1:len(osobnik) - 1]
 
-            syn = [pocz]
             punkt_podzialu = random.randint(1, len(osobnik) - 1)
+
+            syn = [pocz]
+
             syn.extend(osobnik[1:punkt_podzialu])
             for gen in matka:
-                if gen not in syn:
+                if gen not in syn and gen != pocz and len(syn) != len(osobnik) - 1:
                     syn.extend([gen])
             syn.extend([pocz])
             po_krzyzowce.append(syn)
 
             corka = [pocz]
-
             corka.extend(matka[1:punkt_podzialu])
             for gen in osobnik:
-                if gen not in corka and gen != pocz:
+                if gen not in corka and gen != pocz and len(corka) != len(osobnik) - 1:
                     corka.extend([gen])
             corka.extend([pocz])
             po_krzyzowce.append(corka)
@@ -138,13 +133,22 @@ def krzyzowanie(populacja, pocz):
 
 
 def mutacja(populacja, ile_miast):
+    nowa_pop = []
     for osobnik in populacja:
+
         for ind, wartosc in enumerate(osobnik):
-            if 0.01 > random.random():
-                if ind != 0 and ind != len(osobnik):
-                    mut = random.randint(1, ile_miast - 1)
-                    osobnik[ind] = bin(mut)
-    return populacja
+            if 0.03 > random.random():
+                if ind != 0 and ind != len(osobnik)-1:
+                    nowy_osobnik = osobnik
+                    mut = random.randint(1, ile_miast -1)
+                    wartosc1 = osobnik[mut]
+                    nowy_osobnik[mut] = wartosc
+                    nowy_osobnik[ind] = wartosc1
+
+                    nowa_pop.append(nowy_osobnik)
+            else:
+                nowa_pop.append(osobnik)
+    return  nowa_pop
 
 
 # def create_global_variable():
@@ -159,26 +163,25 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     for i in range(ile_miast):
         miasta.append(Miasto())
     ocena = ocen(pop_start, miasta)
-    firstocena = ocen(pop_start, miasta)
+    # firstocena = ocen(pop_start, miasta)
     po_selekcji = selekcja(pop_start, ocena)
     po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
     po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
     ocena = ocen(po_mutacji, miasta)
 
     i = 0
-    while i < 20000:
-        print len(po_mutacji)
-        po_selekcji = selekcja(po_krzyzowaniu, ocena)
+    while i < 10:
+        po_selekcji = selekcja(po_mutacji, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
         po_mutacji = mutacja(po_krzyzowaniu, ile_miast)
         ocena = ocen(po_mutacji, miasta)
 
         i += 1
 
-    print firstocena
+    # print firstocena
     print(ocena)
-    # print(po_selekcji)
-    return ocena
+
+    return po_mutacji[ocena.index(min(ocena))]
 
 
 # ile_miast, poczatek, ile_populacji
@@ -186,12 +189,12 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
-    genetyk(10, 0, 20)
+    # genetyk(10, 0, 20)
 
     # pass
-    # sciezka = genetyk(10, 0, 40)
-    # for ind, wart in enumerate(sciezka):
-    #     sciezka[ind] = int(wart, 2)
-    #
-    # print sciezka
-    # g = Gra(miasta)
+    sciezka = genetyk(15, 0, 40)
+    for ind, wart in enumerate(sciezka):
+        sciezka[ind] = int(wart, 2)
+
+    print sciezka
+    g = Gra(miasta, sciezka)
