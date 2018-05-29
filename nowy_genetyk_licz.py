@@ -3,6 +3,7 @@ import sys, pygame
 import math
 import numpy as np
 
+
 # random.seed(0)
 
 
@@ -10,6 +11,9 @@ class Miasto():
     def __init__(self):
         self.x = random.randint(0, 500)
         self.y = random.randint(0, 500)
+        self.do_ktorej = -1
+        if random.random < 0.4:
+            self.do_ktorej = random.randint(8, 16)
 
 
 def generuj_populacjie_starowa(ile_miast, poczatek, ile_populacji):
@@ -30,6 +34,7 @@ def ocen(pop_start, miasta):
     ocena = []
     # print len(pop_start)
     for osobnik in pop_start:
+        czas = 7 # kurier zaczyna prace o 7
         dlugosc_trasy = 0
         for i in enumerate(osobnik):
             if i[0] != len(osobnik) - 1:
@@ -48,9 +53,19 @@ def ocen(pop_start, miasta):
                 # print (miasta[int(miasto2, 2)].x , miasta[int(miasto1, 2)].x)
                 # igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
 
+
                 iksy = math.pow(abs((miasta[int(miasto2, 2)].x - miasta[int(miasto1, 2)].x)), 2)
                 igreki = math.pow(abs((miasta[int(miasto2, 2)].y - miasta[int(miasto1, 2)].y)), 2)
-                dlugosc_trasy += math.sqrt(abs(iksy + igreki))
+                odcinek = math.sqrt(abs(iksy + igreki))
+                dlugosc_trasy += odcinek
+                czas += (odcinek/2)/60
+                if miasta[int(miasto1, 2)].do_ktorej > czas:
+                    # jak sie nie wyrobi to dostaje kare w wysorkosci 500
+                    dlugosc_trasy += 500
+
+
+
+
         ocena.append(dlugosc_trasy)
 
     return ocena
@@ -151,7 +166,7 @@ def genetyk(ile_miast, poczatek, ile_populacji):
     ocena = ocen(po_mutacji, miasta)
 
     i = 0
-    while i < 10000:
+    while i < 20000:
         print len(po_mutacji)
         po_selekcji = selekcja(po_krzyzowaniu, ocena)
         po_krzyzowaniu = krzyzowanie(po_selekcji, poczatek)
