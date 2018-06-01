@@ -103,7 +103,7 @@ def selekcja(populacja, ocena):
         posortowane.append(droga)
     propa = get_probability_list(ocena)
 
-    return roulette_wheel_pop(posortowane, propa, 30)
+    return roulette_wheel_pop(posortowane, propa, 160)
 
 
 def krzyzowanie(populacja, pocz):
@@ -113,7 +113,7 @@ def krzyzowanie(populacja, pocz):
 
         cr = random.random()
         po_krzyzowce.append(osobnik)
-        if cr > 0.6:
+        if cr > 0:
             matka = random.choice(populacja)[1:len(osobnik) - 1]
 
             punkt_podzialu = random.randint(1, len(osobnik) - 1)
@@ -184,9 +184,14 @@ def genetyk(ile_miast, poczatek, ile_populacji):
 from nowy_genetyk import Gra
 
 if __name__ == '__main__':
-    sciezka = genetyk(15, 0, 40)
+
+    sciezka = genetyk(11, 0, 160)
+    print sciezka
     for ind, wart in enumerate(sciezka):
         sciezka[ind] = int(wart, 2)
-
-    print sciezka
+    for m in miasta:
+        print (m.x, m.y)
+        print m.do_ktorej
+        print "\n"
+    # print sciezka
     g = Gra(miasta, sciezka)
